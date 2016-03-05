@@ -24,6 +24,18 @@ namespace HangFire.Mailer.Controllers
                 _db.SaveChanges();
             }
 
+            // Send email to subscribers
+            var email = new NewCommentEmail
+            {
+                To = "yourmail@example.com",
+                UserName = model.UserName,
+                Comment = model.Text
+            };
+
+            email.ViewName = "NewCommentEmail";
+            email.Send();
+
+            // Redirect to Index
             return RedirectToAction("Index");
         }
 
