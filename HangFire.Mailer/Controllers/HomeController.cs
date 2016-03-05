@@ -1,6 +1,9 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using HangFire.Mailer.Models;
+using Hangfire;
+using System;
+using HangFire.Mailer.Services;
 
 namespace HangFire.Mailer.Controllers
 {
@@ -22,9 +25,11 @@ namespace HangFire.Mailer.Controllers
             {
                 _db.Comments.Add(model);
                 _db.SaveChanges();
+
+                // Send email to subscribers (background job)
+                BackgroundJob.Enqueue(() => EmailService.NotifyNewComment(model.Id));
             }
 
-            // Send email to subscribers
             var email = new NewCommentEmail
             {
                 To = "yourmail@example.com",
@@ -38,6 +43,7 @@ namespace HangFire.Mailer.Controllers
             // Redirect to Index
             return RedirectToAction("Index");
         }
+
 
         protected override void Dispose(bool disposing)
         {
