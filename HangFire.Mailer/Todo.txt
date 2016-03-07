@@ -1,0 +1,2 @@
+﻿- Continue with http://docs.hangfire.io/en/latest/tutorials/send-email.html Automatic Retries
+- How is Hangfire run?
